@@ -214,14 +214,14 @@ class MitraDriverController extends Controller
         ]);
 
         $id_user            = Auth::id();
-        $photo_user         = $id_user . "_" . time() . '.' . $request->photo_user->extension();
-        $path_photo_user    = Storage::putFileAs('public/img/driver', $request->file('photo_user'), $photo_user);
-        $photo_ktp          = $id_user . "_" . time() . '.' . $request->photo_ktp->extension();
-        $path_photo_ktp     = Storage::putFileAs('public/img/driver', $request->file('photo_ktp'), $photo_ktp);
-        $photo_sim          = $id_user . "_" . time() . '.' . $request->photo_sim->extension();
-        $path_photo_sim     = Storage::putFileAs('public/img/driver', $request->file('photo_sim'), $photo_sim);
-        $photo_stnk         = $id_user . "_" . time() . '.' . $request->photo_stnk->extension();
-        $path_photo_stnk    = Storage::putFileAs('public/img/driver', $request->file('photo_stnk'), $photo_stnk);
+        $photo_user         = $id_user . "_" . time() . 'user.' . $request->photo_user->extension();
+        $path_photo_user    = Storage::putFileAs('public/storage/img/user', $request->file('photo_user'), $photo_user);
+        $photo_ktp          = $id_user . "_" . time() . 'ktp.' . $request->photo_ktp->extension();
+        $path_photo_ktp     = Storage::putFileAs('public/storage/img/driver', $request->file('photo_ktp'), $photo_ktp);
+        $photo_sim          = $id_user . "_" . time() . 'sim.' . $request->photo_sim->extension();
+        $path_photo_sim     = Storage::putFileAs('public/storage/img/driver', $request->file('photo_sim'), $photo_sim);
+        $photo_stnk         = $id_user . "_" . time() . 'stnk.' . $request->photo_stnk->extension();
+        $path_photo_stnk    = Storage::putFileAs('public/storage/img/driver', $request->file('photo_stnk'), $photo_stnk);
 
         DB::beginTransaction();
         try {
@@ -243,8 +243,7 @@ class MitraDriverController extends Controller
             return redirect()->back()->with('success', 'Pengajuan anda Terkirim.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->back()->withErrors('error', 'Pengajuan anda Ditolak.');
+            return redirect()->back()->with('error', 'Pengajuan anda Ditolak.');
         }
-        
     }
 }

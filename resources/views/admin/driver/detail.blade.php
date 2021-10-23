@@ -15,30 +15,30 @@
                     <h5 class="card-header">User Info</h5>
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="{{ asset('img/no_img.jpeg') }}" class="rounded-circle" alt="Cinque Terre" width="200"
+                            <img src="{{ Storage::url($foto_user) }}" class="rounded-circle" alt="Cinque Terre" width="200"
                                 height="200">
                         </div>
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
                                     <td>Nama Lengkap</td>
-                                    <td>Dogregertgretgertgrgergte</td>
+                                    <td>{{ $nama_lengkap }}</td>
                                 </tr>
                                 <tr>
                                     <td>email</td>
-                                    <td>Dogregertgretgertgrgergte</td>
+                                    <td>{{ $email }}</td>
                                 </tr>
                                 <tr>
                                     <td>No Telepon</td>
-                                    <td>Dooley</td>
+                                    <td>{{ $no_telepon }}</td>
                                 </tr>
                                 <tr>
                                     <td>Alamat</td>
-                                    <td>Dooley</td>
+                                    <td>{{ $alamat }}</td>
                                 </tr>
                                 <tr>
                                     <td>Tanggal Lahir</td>
-                                    <td>Dooley</td>
+                                    <td>{{ $tgl_lahir }}</td>
                                 </tr>
                             </tbody>
                         </table>

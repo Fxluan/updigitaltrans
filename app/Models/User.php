@@ -49,4 +49,8 @@ class User extends Authenticatable
     public function merchant() {
         return $this->hasMany(Merchant::class);
     }
+
+    public function detailUser() {
+        return $this->hasMany(DetailUser::class);
+    }
 }
