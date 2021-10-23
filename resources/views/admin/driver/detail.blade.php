@@ -15,7 +15,7 @@
                     <h5 class="card-header">User Info</h5>
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="{{ Storage::url($foto_user) }}" class="rounded-circle" alt="Cinque Terre" width="200"
+                            <img src="{{ Storage::url($foto_user) }}" class="rounded-circle" alt="" width="200"
                                 height="200">
                         </div>
                         <table class="table table-borderless">
@@ -48,11 +48,50 @@
             <div class="col-sm-8">
                 {{-- Data Driver --}}
                 <div class="card">
-                    <h5 class="card-header">Driver Info</h5>
+                    <h5 class="card-header">Driver Info {!! $status !!}</h5>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>Tipe Kendaraan</td>
+                                    <td>{{ $tipe_kendaraan }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nopol Kendaraan</td>
+                                    <td>{{ $nopol_kendaraan }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><img src="{{ Storage::url($foto_stnk) }}" class="img-thumbnail" alt=""
+                                            width="400"></td>
+                                </tr>
+                                <tr>
+                                    <td>No SIM</td>
+                                    <td>{{ $no_sim }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><img src="{{ Storage::url($foto_sim) }}" class="img-thumbnail" alt=""
+                                            width="400"></td>
+                                </tr>
+                                <tr>
+                                    <td>No KTP</td>
+                                    <td>{{ $no_ktp }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><img src="{{ Storage::url($foto_ktp) }}" class="img-thumbnail" alt=""
+                                            width="400"></td>
+                                </tr>
+                                <tr>
+                                    <td>Keterangan verifikasi</td>
+                                    <td>{{ $desc_verifikasi }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <button class="btn btn-primary btn-flat btn-sm"
+                            onclick="verifikasiConfirmation({{ $id }})"> Verifikasi</button>
                     </div>
                 </div>
             </div>
@@ -66,5 +105,44 @@
 @stop
 
 @section('js')
+    <script type="text/javascript">
+        function verifikasiConfirmation(id) {
+            swal({
+                title: "Verifikasi?",
+                text: "apakah anda yakin update verifikasi!",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "ya, update verisikasi!",
+                cancelButtonText: "tidak, cancel!",
+                reverseButtons: !0
+            }).then(function(e) {
 
+                if (e.value === true) {
+                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('/verifikasidrive') }}/" + id,
+                        data: {
+                            _token: CSRF_TOKEN
+                        },
+                        dataType: 'JSON',
+                        success: function(results) {
+                            // if (results.success === true) {
+                            //     swal("Done!", results.message, "success");
+                            // } else {
+                            //     swal("Error!", results.message, "error");
+                            // }
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function(dismiss) {
+                return false;
+            })
+        }
+    </script>
 @stop

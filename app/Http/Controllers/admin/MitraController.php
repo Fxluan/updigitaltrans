@@ -8,6 +8,7 @@ use DataTables;
 use App\Models\Driver;
 use App\Models\Merchant;
 use App\Models\DetailUser;
+use Illuminate\Support\Facades\DB;
 
 class MitraController extends Controller
 {
@@ -64,6 +65,7 @@ class MitraController extends Controller
         $no_sim             = $data->sim_number;
         $no_ktp             = $data->ktp_number;
         $status             = $data->status;
+        $desc_verifikasi    = $data->describe_verification;
         $foto_user          = $data->photo_user;
         $foto_ktp           = $data->photo_ktp;
         $foto_sim           = $data->photo_sim;
@@ -71,16 +73,20 @@ class MitraController extends Controller
 
         // manipulasi status
         if ($status == 0) {
-            $status = 'menunggu verifikasi';
+            $status = "<span class=\"badge badge-info\">menunggu verifikasi</span>";
         } else if ($status == 1) {
-            $status = 'verifikasi berhasil';
+            $status = "<span class=\"badge badge-success\">verifikasi berhasil</span>";
         } else if ($status == 2) {
-            $status = 'verifikasi gagal';
+            $status = "<span class=\"badge badge-danger\">verifikasi gagal</span>";
         } else if ($status == 3) {
-            $status = 'pengajuan ulang';
+            $status = "<span class=\"badge badge-warning\">pengajuan ulang</span>";
+        } else if ($status == 4) {
+            $status = "<span class=\"badge badge-warning\">akun dibekukan</span>";
         }
 
+        // data view
         $data = array(
+            'id'                => $id,
             'nama_lengkap'      => $nama_lengkap,
             'email'             => $email,
             'no_telepon'        => $no_telepon,
@@ -91,6 +97,7 @@ class MitraController extends Controller
             'no_sim'            => $no_sim,
             'no_ktp'            => $no_ktp,
             'status'            => $status,
+            'desc_verifikasi'   => $desc_verifikasi != '' ? $desc_verifikasi : 'tidak ada keterangan.',
             'foto_user'         => $foto_user,
             'foto_ktp'          => $foto_ktp,
             'foto_sim'          => $foto_sim,
@@ -98,6 +105,21 @@ class MitraController extends Controller
         );
 
         return view('admin.driver.detail', $data);
+    }
+
+    public function verifikasiDriver(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $driver = Driver::find($request->id);
+            $driver->status = $request->status;
+            $driver->save();
+            DB::commit();
+            return redirect()->back()->with('success', 'verifikasi telah di update.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem.');
+        }
     }
 
     public function merchantView(Request $request)

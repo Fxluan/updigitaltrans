@@ -26,6 +26,7 @@ class CreateDriverTable extends Migration
             $table->string('photo_sim');
             $table->string('photo_stnk');
             $table->boolean('status');
+            $table->string('describe_verification')->default('');
             $table->timestamps();
             $table->index('vehicle_type');
             $table->index('status');
