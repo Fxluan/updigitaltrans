@@ -9,4 +9,8 @@ class Merchant extends Model
 {
     use HasFactory;
     protected $table = 'merchant';
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

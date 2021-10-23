@@ -9,4 +9,8 @@ class Driver extends Model
 {
     use HasFactory;
     protected $table = 'driver';
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -19,8 +19,13 @@ Route::get('/', function () {
 
 Auth::routes();
 // admin
-Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
+Route::get('admin/', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
+Route::get('admin/registrasidriver', [App\Http\Controllers\admin\MitraController::class, 'driverView'])->name('admin.driver')->middleware('is_admin');
+Route::get('admin/detaildriver/{id}', [App\Http\Controllers\admin\MitraController::class, 'driverDetail'])->middleware('is_admin');
+Route::get('admin/registrasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantView'])->name('admin.merchant')->middleware('is_admin');
+Route::get('admin/detailmerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
 
+// User
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user', [App\Http\Controllers\user\UserController::class, 'index'])->name('profile');
 Route::get('/kontakkami', [App\Http\Controllers\user\KontakKamiController::class, 'index'])->name('kontakkami');
