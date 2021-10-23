@@ -36,6 +36,14 @@ class MitraController extends Controller
                     if ($row['status'] == 2) {
                         $lbl = "<span class=\"badge badge-danger\">DiTolak</span>";
                     }
+                    // Pengajuan ulang
+                    if ($row['status'] == 3) {
+                        $lbl = "<span class=\"badge badge-warning\">Pengajuan Ulang</span>";
+                    }
+                    // Pengajuan ulang
+                    if ($row['status'] == 4) {
+                        $lbl = "<span class=\"badge badge-primary\">Dibekukan</span>";
+                    }
 
                     return $lbl;
                 })
@@ -81,7 +89,7 @@ class MitraController extends Controller
         } else if ($status == 3) {
             $status = "<span class=\"badge badge-warning\">pengajuan ulang</span>";
         } else if ($status == 4) {
-            $status = "<span class=\"badge badge-warning\">akun dibekukan</span>";
+            $status = "<span class=\"badge badge-primary\">akun dibekukan</span>";
         }
 
         // data view
@@ -107,18 +115,26 @@ class MitraController extends Controller
         return view('admin.driver.detail', $data);
     }
 
-    public function verifikasiDriver(Request $request)
+    public function driverVerification(Request $request)
     {
         DB::beginTransaction();
         try {
             $driver = Driver::find($request->id);
             $driver->status = $request->status;
+            $driver->describe_verification = $request->deskripsi != null ? $request->deskripsi : '';
             $driver->save();
             DB::commit();
-            return redirect()->back()->with('success', 'verifikasi telah di update.');
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'verifikasi telah diupdate.',
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem.');
+            return response()->json([
+                'success' => 0,
+                'message' => 'verifikasi gagal diupdate.',
+            ]);
         }
     }
 

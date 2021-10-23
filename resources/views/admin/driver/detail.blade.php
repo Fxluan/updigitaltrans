@@ -106,43 +106,68 @@
 
 @section('js')
     <script type="text/javascript">
-        function verifikasiConfirmation(id) {
-            swal({
-                title: "Verifikasi?",
-                text: "apakah anda yakin update verifikasi!",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "ya, update verisikasi!",
-                cancelButtonText: "tidak, cancel!",
-                reverseButtons: !0
-            }).then(function(e) {
-
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{ url('/verifikasidrive') }}/" + id,
-                        data: {
-                            _token: CSRF_TOKEN
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            // if (results.success === true) {
-                            //     swal("Done!", results.message, "success");
-                            // } else {
-                            //     swal("Error!", results.message, "error");
-                            // }
+        async function verifikasiConfirmation(id) {
+            let deskripsi = '';
+            let status = '';
+            status = await swal({
+                title: 'Pilih status baru',
+                input: 'select',
+                inputOptions: {
+                    1: 'aktifasi akun',
+                    2: 'tolak pengajuan',
+                    4: 'bekukan akun'
+                },
+                inputPlaceholder: 'Select a status',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value !== '') {
+                            resolve()
+                        } else {
+                            resolve('opsi harus dipilih')
                         }
-                    });
-
-                } else {
-                    e.dismiss;
+                    })
                 }
-
-            }, function(dismiss) {
-                return false;
             })
+
+            if (status.value == 2 || status.value == 4) {
+                deskripsi = await swal({
+                    title: 'keterangan',
+                    input: 'textarea',
+                    inputPlaceholder: 'Type your message here...',
+                    inputAttributes: {
+                        'aria-label': 'Type your message here'
+                    },
+                    showCancelButton: true
+                })
+            }
+            console.log('deskripsi ', status.value, deskripsi.value)
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('admin/verifikasidrive') }}",
+                data: {
+                    _token: CSRF_TOKEN,
+                    status: status.value,
+                    id,
+                    deskripsi: deskripsi.value != undefined ? deskripsi.value : ' '
+                },
+                dataType: 'json',
+                success: function(results) {
+                    if (results.success === 1) {
+                        swal("Done!", results.message, "success").then(() => {
+                            location.reload(true);
+                        });
+                    } else {
+                        swal("Error!", results.message, "error").then(() => {
+                            location.reload(true);
+                        });
+                    }
+                },
+            });
+
         }
     </script>
 @stop

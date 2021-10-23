@@ -19,10 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 // admin
-Route::get('admin/', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
+Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
 Route::get('admin/registrasidriver', [App\Http\Controllers\admin\MitraController::class, 'driverView'])->name('admin.driver')->middleware('is_admin');
 Route::get('admin/detaildriver/{id}', [App\Http\Controllers\admin\MitraController::class, 'driverDetail'])->middleware('is_admin');
-Route::post('/verifikasidrive', [App\Http\Controllers\user\MitraDriverController::class, 'verifikasiDriver'])->name('verifikasidrive')->middleware('is_admin');
+Route::post('admin/verifikasidrive', [App\Http\Controllers\admin\MitraController::class, 'driverVerification'])->name('admin.verifikasidrive')->middleware('is_admin');
 Route::get('admin/registrasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantView'])->name('admin.merchant')->middleware('is_admin');
 Route::get('admin/detailmerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
 
