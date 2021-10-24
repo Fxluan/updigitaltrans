@@ -255,13 +255,18 @@ return [
         // ],
         // ['header' => 'account_settings'],
         [
-            'text' => 'Registrasi Driver',
-            'url'  => 'admin/registrasidriver',
+            'text' => 'Mitra Driver',
+            'url'  => 'admin/driver',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Registrasi Merchant',
-            'url'  => 'admin/registrasimerchant',
+            'text' => 'Mitra Merchant',
+            'url'  => 'admin/merchant',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Pengajuan Mitra',
+            'url'  => 'admin/pengajuan',
             'icon' => 'fas fa-fw fa-user',
         ],
         // [
