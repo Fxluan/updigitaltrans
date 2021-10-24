@@ -30,7 +30,8 @@ Route::post('admin/verifikasidrive', [App\Http\Controllers\admin\MitraController
 
 // admin merchant
 Route::get('admin/merchant', [App\Http\Controllers\admin\MitraController::class, 'merchantView'])->name('admin.merchant')->middleware('is_admin');
-Route::get('admin/detailmerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
+Route::get('admin/detailmerchant/{id}', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
+Route::post('admin/verifikasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantVerification'])->name('admin.verifikasimerchant')->middleware('is_admin');
 
 // User
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

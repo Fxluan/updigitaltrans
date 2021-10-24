@@ -70,8 +70,8 @@
                         name: 'role'
                     },
                     {
-                        data: 'status',
-                        name: 'status'
+                        data: 'status_validasi',
+                        name: 'status_validasi'
                     },
                     {
                         data: 'action',
