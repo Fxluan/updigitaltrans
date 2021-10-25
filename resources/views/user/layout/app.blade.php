@@ -47,13 +47,13 @@
                 <ul class="navbar-nav mr-auto"></ul>
                 <ul class="navbar-nav abs-center-x">
                     <li class="nav-item">
-                        <a class="nav-link" href="/mitradriver">Mitra Driver</a>
+                        <a class="nav-link" href="{{url('/mitradriver')}}">Mitra Driver</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mitramerchant">Mitra Merchant</a>
+                        <a class="nav-link" href="{{url('/mitramerchant')}}">Mitra Merchant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/kontakkami">Kontak Kami</a>
+                        <a class="nav-link" href="{{url('/kontakkami')}}">Kontak Kami</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
