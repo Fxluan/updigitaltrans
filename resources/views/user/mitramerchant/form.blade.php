@@ -2,7 +2,7 @@
 @section('content')
     {{-- CONTENT --}}
     <div>
-        <form method="post" action="{{ $form['link'] }}" enctype="multipart/form-data">
+        <form method="post" action="{{ url($form['link']) }}" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="hidden" id="type_mitra" name="type_mitra" value="{{ $form['type_mitra'] }}">
             @foreach ($form['form'] as $form_item)

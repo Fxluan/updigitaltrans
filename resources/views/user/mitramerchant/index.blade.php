@@ -22,7 +22,7 @@
                                     <h6 class="text-left">Deskripsi singkat</h6>
                                     <p class="text-justify">{{ $val_item['desc'] }}
                                     </p>
-                                    <a href="{{ $val_item['link'] }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
+                                    <a href="{{url($val_item['link']) }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
                                 </div>
                             @endif
                             @if ($key % 2 != 0)
@@ -31,7 +31,7 @@
                                     <h6 class="text-left">Deskripsi singkat</h6>
                                     <p class="text-justify">{{ $val_item['desc'] }}
                                     </p>
-                                    <a href="{{ $val_item['link'] }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
+                                    <a href="{{ url($val_item['link']) }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
                                 </div>
                                 <div class="col-md-7 pt-2 pb-2">
                                     <img id="img_{{ $val_item['id'] }}" src="{{ asset($val_item['img']) }}" alt="">

@@ -15,7 +15,7 @@
                     <h5 class="card-header">User Info</h5>
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="{{ Storage::url($foto_user) }}" class="rounded-circle" alt="" width="200"
+                            <img src="{{asset(Storage::url($foto_user)) }}" class="rounded-circle" alt="" width="200"
                                 height="200">
                         </div>
                         <table class="table table-borderless">
@@ -62,7 +62,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><img src="{{ Storage::url($foto_stnk) }}" class="img-thumbnail" alt=""
+                                    <td><img src="{{ asset(Storage::url($foto_stnk)) }}" class="img-thumbnail" alt=""
                                             width="400"></td>
                                 </tr>
                                 <tr>
@@ -71,7 +71,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><img src="{{ Storage::url($foto_sim) }}" class="img-thumbnail" alt=""
+                                    <td><img src="{{ asset(Storage::url($foto_sim)) }}" class="img-thumbnail" alt=""
                                             width="400"></td>
                                 </tr>
                                 <tr>
@@ -80,7 +80,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><img src="{{ Storage::url($foto_ktp) }}" class="img-thumbnail" alt=""
+                                    <td><img src="{{asset(Storage::url($foto_ktp)) }}" class="img-thumbnail" alt=""
                                             width="400"></td>
                                 </tr>
                                 <tr>
