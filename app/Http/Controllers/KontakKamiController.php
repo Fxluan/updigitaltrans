@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\user;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class KontakKamiController extends Controller
@@ -22,8 +21,14 @@ class KontakKamiController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function kontakkamiUser()
     {
         return view('user.kontakkami');
     }
+
+     public function kontakkamiAdmin()
+    {
+        return view('admin.kontakkami.index');
+    }
+    
 }

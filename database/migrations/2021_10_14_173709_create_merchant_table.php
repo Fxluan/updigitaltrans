@@ -25,6 +25,7 @@ class CreateMerchantTable extends Migration
             $table->string('address_menchant');
             $table->enum('role', ['food', 'mart']);
             $table->boolean('status');
+            $table->string('describe_verification')->default('');
             $table->timestamps();
             $table->index('merchant_name');	
             $table->index('role');	
