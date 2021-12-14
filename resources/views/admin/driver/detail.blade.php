@@ -15,7 +15,7 @@
                     <h5 class="card-header">User Info</h5>
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="{{asset(Storage::url($foto_user)) }}" class="rounded-circle" alt="" width="200"
+                            <img src="{{ asset(Storage::url($foto_user)) }}" class="rounded-circle" alt="" width="200"
                                 height="200">
                         </div>
                         <table class="table table-borderless">
@@ -80,7 +80,7 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><img src="{{asset(Storage::url($foto_ktp)) }}" class="img-thumbnail" alt=""
+                                    <td><img src="{{ asset(Storage::url($foto_ktp)) }}" class="img-thumbnail" alt=""
                                             width="400"></td>
                                 </tr>
                                 <tr>
@@ -90,13 +90,22 @@
                             </tbody>
                         </table>
 
+                        @if (count($ajuan_jawaban) > 0)
+                            <label for="">PERTANYAAN</label>
+                            @foreach ($ajuan_jawaban as $data_jawaban)
+                                <div class="form-group">
+                                    <label for="pertanyaan">{{ $data_jawaban['pertanyaan'] }}</label>
+                                    <label class="form-control" for="jawaban">{{ $data_jawaban['jawaban'] }}</label>
+                                </div>
+                            @endforeach
+                        @endif
+
                         <button class="btn btn-primary btn-flat btn-sm"
                             onclick="verifikasiConfirmation({{ $id }})"> Verifikasi</button>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 @stop
 

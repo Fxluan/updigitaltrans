@@ -40,8 +40,7 @@ Route::post('admin/verifikasimerchant', [App\Http\Controllers\admin\MitraControl
 
 // admin verifikasi
 Route::get('admin/verifikasi', [App\Http\Controllers\admin\VerificationMitraController::class, 'index'])->name('admin.verifiaksi')->middleware('is_admin');
-// Route::get('admin/detailmerchant/{id}', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
-// Route::post('admin/verifikasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantVerification'])->name('admin.verifikasimerchant')->middleware('is_admin');
+Route::post('admin/storepertanyaan', [App\Http\Controllers\admin\VerificationMitraController::class, 'storepertanyaan'])->name('admin.storepertanyaan')->middleware('is_admin');
 
 // User
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -53,6 +52,7 @@ Route::get('/mitradriver', [App\Http\Controllers\user\MitraDriverController::cla
 Route::get('/daftarbike', [App\Http\Controllers\user\MitraDriverController::class, 'registerMotocycle'])->name('daftarbike');
 Route::get('/daftarcar', [App\Http\Controllers\user\MitraDriverController::class, 'registerCar'])->name('daftarcar');
 Route::post('/storedrive', [App\Http\Controllers\user\MitraDriverController::class, 'store'])->name('storedrive');
+Route::post('/verifikasimitradriver', [App\Http\Controllers\user\MitraDriverController::class, 'verificationmitra'])->name('verificationmitra');
 
 // user merchant
 Route::get('/mitramerchant', [App\Http\Controllers\user\MitraMerchantController::class, 'index'])->name('mitramerchant');
@@ -60,5 +60,3 @@ Route::get('/daftarfood', [App\Http\Controllers\user\MitraMerchantController::cl
 Route::get('/daftarmart', [App\Http\Controllers\user\MitraMerchantController::class, 'registerMart'])->name('daftarmart');
 Route::post('/storemerchant', [App\Http\Controllers\user\MitraMerchantController::class, 'store'])->name('storemerchant');
 
-// verifikasi mitra
-Route::post('/verifikasimitra', [App\Http\Controllers\user\VerificationMitraController::class, 'verifikasimitra'])->name('verifikasimitra');

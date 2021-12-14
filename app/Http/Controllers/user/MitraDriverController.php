@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Driver;
+use App\Models\JawabanVerifikasiUser;
+use App\Models\PertanyaanVerifikasi;
 
 class MitraDriverController extends Controller
 {
@@ -125,26 +127,26 @@ class MitraDriverController extends Controller
             )
         );
 
+        $pertanyaan_verifikasi = PertanyaanVerifikasi::get();
+
+        $form_verifikasi = [];
+        foreach ($pertanyaan_verifikasi as $key => $value) {
+            $form_verifikasi[] = array(
+                'id'            => $value->id,
+                'pertanyaan'    => $value->pertanyaan,
+                'pilihan_ganda' => json_decode($value->pilihan_ganda),
+                'type'          => 'radio',
+                'mandatory'     => 'required',
+            );
+        }
         $form_validasi = array(
-            'link' => '/verifikasimitra',
+            'link' => '/verifikasimitradriver',
             'type_mitra' => 'motorcycle',
-            'form' => array(
-                array(
-                    'pertanyaan' => '1. Apakah anda ...',
-                    'pilihan_ganda' => ["jabawan A","jabawan B","jabawan C"],
-                    'type' => 'radio',
-                    'mandatory' => 'required',
-                ),
-                array(
-                    'pertanyaan' => '2. Apakah anda ...',
-                    'pilihan_ganda' => ["jabawan A","jabawan B","jabawan C"],
-                    'type' => 'radio',
-                    'mandatory' => 'required',
-                ),
-            )
+            'form' => $form_verifikasi
         );
 
         $status_user = $this->checkstatus($user_id);
+
         $data = array(
             "form_regist"   => $form_regist,
             "form_validasi" => $form_validasi,
@@ -277,7 +279,6 @@ class MitraDriverController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Pengajuan anda Terkirim.');
-            // return redirect()->back()->alert()->html('<i>HTML</i> <u>example</u>'," You can use <b>bold text</b>, <a href='//github.com'>links</a> and other HTML tags ",'success');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Pengajuan anda Ditolak.');
@@ -297,5 +298,34 @@ class MitraDriverController extends Controller
         }
 
         return $get_status;
+    }
+
+    public function verificationmitra(Request $request)
+    {
+        $data = $request->all();
+
+        unset($data['_token']);
+        unset($data['type_mitra']);
+        unset($data['pertanyaan_id']);
+        $data = json_encode($data);
+        $user_id = Auth::id();
+
+        DB::beginTransaction();
+        try {
+            $JawabanVerifikasiUser = new JawabanVerifikasiUser;
+            $JawabanVerifikasiUser->user_id = $user_id;
+            $JawabanVerifikasiUser->pilihan_ganda = $data;
+            $JawabanVerifikasiUser->save();
+
+            $Driver = Driver::find($user_id);
+            $Driver->status = 5;
+            $Driver->save();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pengajuan anda Terkirim.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Pengajuan anda Ditolak.');
+        }
     }
 }

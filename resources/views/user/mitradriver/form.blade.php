@@ -29,27 +29,28 @@
                 @if ($data['status_user'] == 0)
                     <form method="post" action="{{ url($data['form_validasi']['link']) }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        <input type="hidden" id="type_mitra" name="type_mitra" value="{{$data['form_validasi']['type_mitra']}}">
-                        <?php $i = 1; ?>
+                        <input type="hidden" id="type_mitra" name="type_mitra"
+                            value="{{ $data['form_validasi']['type_mitra'] }}">
                         @foreach ($data['form_validasi']['form'] as $form_validasi)
                             <div class="form-group">
-                                <label for="pernyataan">{{ $form_validasi['pertanyaan'] }}</label>
+                                <input type="hidden" id="pertanyaan_id" name="pertanyaan_id"
+                                    value="{{ $form_validasi['id'] }}">
+                                <label for="pertanyaan">{{ $form_validasi['pertanyaan'] }}</label>
                                 <div class="form-check">
-                                    <?php $j = 1; ?>
                                     @foreach ($form_validasi['pilihan_ganda'] as $key => $pilihan_ganda)
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="{{ $form_validasi['type'] }}"
-                                                name="jawaban{{ $i }}" id="jawaban{{ $j }}"
-                                                value="{{ $pilihan_ganda }}">
-                                            <label class="form-check-label"
-                                                for="jawaban{{ $i }}">{{ $pilihan_ganda }}</label>
-                                        </div>
-                                        <?php $j++; ?>
+                                        @if ($pilihan_ganda != null)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="{{ $form_validasi['type'] }}"
+                                                    name="jawaban_{{ $form_validasi['id'] }}"
+                                                    id="jawaban_{{ $form_validasi['id'] }}"
+                                                    value="{{ $pilihan_ganda }}">
+                                                <label class="form-check-label"
+                                                    for="jawaban_{{ $form_validasi['id'] }}">{{ $pilihan_ganda }}</label>
+                                            </div>
+                                        @endif
                                     @endforeach
-
                                 </div>
                             </div>
-                            <?php $i++; ?>
                         @endforeach
                         <button class="btn btn-primary">Submit</button>
                     </form>
@@ -60,7 +61,7 @@
                 @if ($data['status_user'] == 2)
                     <p>pengajuan anda ditolak</p>
                 @endif
-                @if ($data['status_user'] == 2)
+                @if ($data['status_user'] == 4)
                     <p>pengajuan anda menunggu validasi</p>
                 @endif
 

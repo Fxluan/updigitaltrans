@@ -8,6 +8,8 @@ use DataTables;
 use App\Models\Driver;
 use App\Models\Merchant;
 use App\Models\DetailUser;
+use App\Models\PertanyaanVerifikasi;
+use App\Models\JawabanVerifikasiUser;
 use Illuminate\Support\Facades\DB;
 
 class MitraController extends Controller
@@ -213,9 +215,13 @@ class MitraController extends Controller
                     if ($row['status'] == 3) {
                         $lbl = "<span class=\"badge badge-warning\">Pengajuan Ulang</span>";
                     }
-                    // Pengajuan ulang
+                    // dibekukan
                     if ($row['status'] == 4) {
                         $lbl = "<span class=\"badge badge-primary\">Dibekukan</span>";
+                    }
+                    // menunggu konfirmasi
+                    if ($row['status'] == 5) {
+                        $lbl = "<span class=\"badge badge-info\">Menunggu validasi</span>";
                     }
 
                     return $lbl;
@@ -237,6 +243,7 @@ class MitraController extends Controller
         // deklarasi variabel
         $data               = Driver::with('user')->find($id);
         $detail_user        = DetailUser::with('user')->find($data->user_id);
+        $jawaban            = JawabanVerifikasiUser::where('user_id', $data->user_id)->first();
         $nama_lengkap       = $data->user->name;
         $email              = $data->user->email;
         $no_telepon         = $detail_user ? $detail_user->phone : '-';
@@ -253,6 +260,23 @@ class MitraController extends Controller
         $foto_sim           = $data->photo_sim;
         $foto_stnk          = $data->photo_stnk;
 
+        // konstruk pertanyaan dan jawaban user
+        $ajuan_jawaban_verifikasi = [];
+        if ($jawaban != null) {
+            $pilihan_ganda  = json_decode($jawaban->pilihan_ganda);
+            foreach ($pilihan_ganda as $key => $value) {
+
+                $pertanyaan_id      = explode("_", $key)[1];
+                $pertanyaan         = PertanyaanVerifikasi::select('pertanyaan')->find($pertanyaan_id)->value('pertanyaan');
+                $pilihan_jawaban    = $value;
+
+                $ajuan_jawaban_verifikasi[] = array(
+                    "pertanyaan"    => $pertanyaan,
+                    "jawaban"       => $pilihan_jawaban
+                );
+            }
+        }
+
         // manipulasi status
         if ($status == 0) {
             $status = "<span class=\"badge badge-info\">menunggu verifikasi</span>";
@@ -264,6 +288,8 @@ class MitraController extends Controller
             $status = "<span class=\"badge badge-warning\">pengajuan ulang</span>";
         } else if ($status == 4) {
             $status = "<span class=\"badge badge-primary\">akun dibekukan</span>";
+        } else if ($status == 5) {
+            $status = "<span class=\"badge badge-info\">menunggu verifikasi</span>";
         }
 
         // data view
@@ -283,7 +309,8 @@ class MitraController extends Controller
             'foto_user'         => $foto_user,
             'foto_ktp'          => $foto_ktp,
             'foto_sim'          => $foto_sim,
-            'foto_stnk'         => $foto_stnk
+            'foto_stnk'         => $foto_stnk,
+            'ajuan_jawaban'     => $ajuan_jawaban_verifikasi
         );
 
         return view('admin.driver.detail', $data);

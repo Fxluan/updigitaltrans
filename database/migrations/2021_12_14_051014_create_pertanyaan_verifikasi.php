@@ -15,8 +15,9 @@ class CreatePertanyaanVerifikasi extends Migration
     {
         Schema::create('pertanyaan_verifikasi', function (Blueprint $table) {
             $table->id();
-            $table->text('pernyataan');
+            $table->text('pertanyaan');
             $table->text('pilihan_ganda');
+            $table->string('type_mitra');
             $table->timestamps();
         });
     }
