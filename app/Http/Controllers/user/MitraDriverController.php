@@ -55,7 +55,7 @@ class MitraDriverController extends Controller
 
     public function registerMotocycle()
     {
-        $user_id = Auth::user()->id;
+        $user_id = Auth::id();
 
         $form_regist = array(
             'link' => '/storedrive',
@@ -337,7 +337,7 @@ class MitraDriverController extends Controller
             $JawabanVerifikasiUser->pilihan_ganda = $data;
             $JawabanVerifikasiUser->save();
 
-            $Driver = Driver::find($user_id);
+            $Driver = Driver::where('user_id', $user_id)->orderBy('id', 'DESC')->limit(1)->first();
             $Driver->status = 5;
             $Driver->save();
 

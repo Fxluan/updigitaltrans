@@ -42,6 +42,7 @@
                                 </tr>
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -87,6 +88,16 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        @if (count($ajuan_jawaban) > 0)
+                            <label for="">PERTANYAAN</label>
+                            @foreach ($ajuan_jawaban as $data_jawaban)
+                                <div class="form-group">
+                                    <label for="pertanyaan">{{ $data_jawaban['pertanyaan'] }}</label>
+                                    <label class="form-control" for="jawaban">{{ $data_jawaban['jawaban'] }}</label>
+                                </div>
+                            @endforeach
+                        @endif
 
                         <button class="btn btn-primary btn-flat btn-sm"
                             onclick="verifikasiConfirmation({{ $id }})"> Verifikasi</button>

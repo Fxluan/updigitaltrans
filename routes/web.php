@@ -59,4 +59,4 @@ Route::get('/mitramerchant', [App\Http\Controllers\user\MitraMerchantController:
 Route::get('/daftarfood', [App\Http\Controllers\user\MitraMerchantController::class, 'registerFood'])->name('daftarfood');
 Route::get('/daftarmart', [App\Http\Controllers\user\MitraMerchantController::class, 'registerMart'])->name('daftarmart');
 Route::post('/storemerchant', [App\Http\Controllers\user\MitraMerchantController::class, 'store'])->name('storemerchant');
-
+Route::post('/verifikasimitramerchant', [App\Http\Controllers\user\MitraMerchantController::class, 'verificationmitramerchant'])->name('verificationmitramerchant');

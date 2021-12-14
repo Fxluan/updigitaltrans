@@ -243,7 +243,7 @@ class MitraController extends Controller
         // deklarasi variabel
         $data               = Driver::with('user')->find($id);
         $detail_user        = DetailUser::with('user')->find($data->user_id);
-        $jawaban            = JawabanVerifikasiUser::where('user_id', $data->user_id)->first();
+        $jawaban            = JawabanVerifikasiUser::where('user_id', $data->user_id)->where('type_mitra', $data->vehicle_type)->first();
         $nama_lengkap       = $data->user->name;
         $email              = $data->user->email;
         $no_telepon         = $detail_user ? $detail_user->phone : '-';
@@ -267,7 +267,7 @@ class MitraController extends Controller
             foreach ($pilihan_ganda as $key => $value) {
 
                 $pertanyaan_id      = explode("_", $key)[1];
-                $pertanyaan         = PertanyaanVerifikasi::select('pertanyaan')->find($pertanyaan_id)->value('pertanyaan');
+                $pertanyaan         = PertanyaanVerifikasi::select('pertanyaan')->where('id', $pertanyaan_id)->value('pertanyaan');
                 $pilihan_jawaban    = $value;
 
                 $ajuan_jawaban_verifikasi[] = array(
@@ -362,9 +362,13 @@ class MitraController extends Controller
                     if ($row['status'] == 3) {
                         $lbl = "<span class=\"badge badge-warning\">Pengajuan Ulang</span>";
                     }
-                    // Pengajuan ulang
+                    // akun dibekukan
                     if ($row['status'] == 4) {
                         $lbl = "<span class=\"badge badge-primary\">Dibekukan</span>";
+                    }
+                    // menunggu konfirmasi
+                    if ($row['status'] == 5) {
+                        $lbl = "<span class=\"badge badge-info\">Menunggu validasi</span>";
                     }
 
                     return $lbl;
@@ -386,6 +390,7 @@ class MitraController extends Controller
         // deklarasi variabel
         $data               = Merchant::with('user')->find($id);
         $detail_user        = DetailUser::with('user')->find($data->user_id);
+        $jawaban            = JawabanVerifikasiUser::where('user_id', $data->user_id)->where('type_mitra', $data->role)->first();
         $nama_lengkap       = $data->user->name;
         $email              = $data->user->email;
         $no_telepon         = $detail_user ? $detail_user->phone : '-';
@@ -401,6 +406,24 @@ class MitraController extends Controller
         $desc_verifikasi    = $data->describe_verification;
         $galery_merchant    = $data->galery_merchant;
 
+        // konstruk pertanyaan dan jawaban user
+        $ajuan_jawaban_verifikasi = [];
+        if ($jawaban != null) {
+            $pilihan_ganda  = json_decode($jawaban->pilihan_ganda);
+            foreach ($pilihan_ganda as $key => $value) {
+
+                $pertanyaan_id      = explode("_", $key)[1];
+                $pertanyaan         = PertanyaanVerifikasi::select('pertanyaan')->where('id', $pertanyaan_id)->value('pertanyaan');
+                $pilihan_jawaban    = $value;
+
+                $ajuan_jawaban_verifikasi[] = array(
+                    "pertanyaan"    => $pertanyaan,
+                    "jawaban"       => $pilihan_jawaban
+                );
+            }
+        }
+
+
         // manipulasi status
         if ($status == 0) {
             $status = "<span class=\"badge badge-info\">menunggu verifikasi</span>";
@@ -412,6 +435,8 @@ class MitraController extends Controller
             $status = "<span class=\"badge badge-warning\">pengajuan ulang</span>";
         } else if ($status == 4) {
             $status = "<span class=\"badge badge-primary\">akun dibekukan</span>";
+        } else if ($status == 5) {
+            $status = "<span class=\"badge badge-info\">menunggu verifikasi</span>";
         }
 
         // data view
@@ -431,6 +456,7 @@ class MitraController extends Controller
             'address_menchant'  => $address_menchant,
             'role'              => $role,
             'galery_merchant'   => $galery_merchant,
+            'ajuan_jawaban'     => $ajuan_jawaban_verifikasi
         );
 
         return view('admin.merchant.detail', $data);

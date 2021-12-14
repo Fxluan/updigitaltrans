@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Merchant;
+use App\Models\JawabanVerifikasiUser;
+use App\Models\PertanyaanVerifikasi;
 
 class MitraMerchantController extends Controller
 {
@@ -51,7 +53,9 @@ class MitraMerchantController extends Controller
 
     public function registerFood()
     {
-        $form = array(
+        $user_id = Auth::id();
+
+        $form_regist = array(
             'link' => '/storemerchant',
             'type_mitra' => 'food',
             'form' => array(
@@ -112,12 +116,38 @@ class MitraMerchantController extends Controller
             )
         );
 
-        return view('user.mitramerchant.form', compact('form'));
+        $pertanyaan_verifikasi = PertanyaanVerifikasi::where('type_mitra', 'merchant')->get();
+
+        $form_verifikasi = [];
+        foreach ($pertanyaan_verifikasi as $key => $value) {
+            $form_verifikasi[] = array(
+                'id'            => $value->id,
+                'pertanyaan'    => $value->pertanyaan,
+                'pilihan_ganda' => json_decode($value->pilihan_ganda),
+                'type'          => 'radio',
+                'mandatory'     => 'required',
+            );
+        }
+        $form_validasi = array(
+            'link' => '/verifikasimitramerchant',
+            'type_mitra' => 'food',
+            'form' => $form_verifikasi
+        );
+        $status_user = $this->checkstatus($user_id, 'food');
+
+        $data = array(
+            "form_regist"   => $form_regist,
+            "form_validasi" => $form_validasi,
+            "status_user"   => $status_user
+        );
+        return view('user.mitramerchant.form', compact('data'));
     }
 
     public function registerMart()
     {
-        $form = array(
+        $user_id = Auth::id();
+
+        $form_regist = array(
             'link' => '/storemerchant',
             'type_mitra' => 'mart',
             'form' => array(
@@ -178,7 +208,33 @@ class MitraMerchantController extends Controller
             )
         );
 
-        return view('user.mitramerchant.form', compact('form'));
+        $pertanyaan_verifikasi = PertanyaanVerifikasi::where('type_mitra', 'merchant')->get();
+
+        $form_verifikasi = [];
+        foreach ($pertanyaan_verifikasi as $key => $value) {
+            $form_verifikasi[] = array(
+                'id'            => $value->id,
+                'pertanyaan'    => $value->pertanyaan,
+                'pilihan_ganda' => json_decode($value->pilihan_ganda),
+                'type'          => 'radio',
+                'mandatory'     => 'required',
+            );
+        }
+        $form_validasi = array(
+            'link' => '/verifikasimitramerchant',
+            'type_mitra' => 'mart',
+            'form' => $form_verifikasi
+        );
+
+        $status_user = $this->checkstatus($user_id, 'mart');
+
+        $data = array(
+            "form_regist"   => $form_regist,
+            "form_validasi" => $form_validasi,
+            "status_user"   => $status_user
+        );
+
+        return view('user.mitramerchant.form', compact('data'));
     }
 
     public function store(Request $request)
@@ -218,6 +274,51 @@ class MitraMerchantController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->withErrors('error', 'Pengajuan anda Ditolak.');
+        }
+    }
+
+    private function checkstatus($id, $type)
+    {
+        $is_exist = Merchant::select('status')->where('user_id', $id)->where('role', $type)->exists();
+
+        if ($is_exist == true) {
+            $get_status = Merchant::select('status')->where('user_id', $id)->where('role', $type)->limit(1)->orderBy('id', 'DESC')->value('status');
+        }
+
+        if ($is_exist == false) {
+            $get_status = 'not_exist';
+        }
+
+        return $get_status;
+    }
+
+    public function verificationmitramerchant(Request $request)
+    {
+        $data = $request->all();
+        unset($data['_token']);
+        unset($data['type_mitra']);
+        unset($data['pertanyaan_id']);
+        $data = json_encode($data);
+        $user_id = Auth::id();
+
+        DB::beginTransaction();
+        try {
+            $JawabanVerifikasiUser                  = new JawabanVerifikasiUser;
+            $JawabanVerifikasiUser->user_id         = $user_id;
+            $JawabanVerifikasiUser->pilihan_ganda   = $data;
+            $JawabanVerifikasiUser->type_mitra      = $request->type_mitra;
+            $JawabanVerifikasiUser->save();
+
+            $Merchant = Merchant::where('user_id', $user_id)->orderBy('id', 'DESC')->limit(1)->first();
+            $Merchant->status = 5;
+            $Merchant->save();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pengajuan anda Terkirim.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th->getMessage());
+            return redirect()->back()->with('error', 'Pengajuan anda Ditolak.');
         }
     }
 }

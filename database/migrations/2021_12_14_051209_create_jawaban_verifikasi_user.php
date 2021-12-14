@@ -20,6 +20,7 @@ class CreateJawabanVerifikasiUser extends Migration
             $table->unsignedBigInteger('pertanyaan_id');
             $table->foreign('pertanyaan_id')->references('id')->on('pertanyaan_verifikasi')->onUpdate('cascade')->onDelete('cascade');
             $table->text('pilihan_ganda');
+            $table->text('type_mitra');
             $table->timestamps();
         });
     }
