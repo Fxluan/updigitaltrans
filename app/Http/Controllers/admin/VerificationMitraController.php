@@ -24,11 +24,11 @@ class VerificationMitraController extends Controller
             $data = PertanyaanVerifikasi::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = "<a href=\"detaildriver/" . $row['id'] . "\" class=\"edit btn btn-info btn-sm\">Detail</a>";
-                    return $btn;
-                })
-                ->rawColumns(['action'])
+                // ->addColumn('action', function ($row) {
+                //     $btn = "<a href=\"detaildriver/" . $row['id'] . "\" class=\"edit btn btn-info btn-sm\">Detail</a>";
+                //     return $btn;
+                // })
+                // ->rawColumns(['action'])
                 ->make(true);
         }
 

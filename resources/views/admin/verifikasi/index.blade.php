@@ -19,7 +19,8 @@
                 <th>No</th>
                 <th>Pertanyaan</th>
                 <th>Pilihan Ganda</th>
-                <th width="100px">Action</th>
+                <th>Tipe Mitra</th>
+                {{-- <th width="100px">Action</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -104,11 +105,15 @@
                         name: 'pilihan_ganda'
                     },
                     {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                        data: 'type_mitra',
+                        name: 'type_mitra'
                     },
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     orderable: false,
+                    //     searchable: false
+                    // },
                 ]
             });
 
