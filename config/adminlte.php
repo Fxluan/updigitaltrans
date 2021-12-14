@@ -269,6 +269,11 @@ return [
             'url'  => 'admin/pengajuan',
             'icon' => 'fas fa-fw fa-user',
         ],
+        [
+            'text' => 'Pertanyaan Verifikasi',
+            'url'  => 'admin/verifikasi',
+            'icon' => 'fas fa-fw fa-user',
+        ],
         // [
         //     'text' => 'change_password',
         //     'url'  => 'admin/settings',

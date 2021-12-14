@@ -1,4 +1,7 @@
 @extends('user.layout.app')
+@section('carousel')
+    @include('user.layout.caraousel')
+@endsection
 @section('content')
     {{-- CONTENT --}}
     <div id="lisItem" class="col p-4">
@@ -22,7 +25,7 @@
                                     <h6 class="text-left">Deskripsi singkat</h6>
                                     <p class="text-justify">{{ $val_item['desc'] }}
                                     </p>
-                                    <a href="{{url($val_item['link']) }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
+                                    <a href="{{ url($val_item['link']) }}" class="btn btn-danger pl-5 pr-5">Daftar</a>
                                 </div>
                             @endif
                             @if ($key % 2 != 0)
@@ -45,6 +48,11 @@
     @endforeach
     </div>
 
+    </div>
+
+@endsection
+
+@section('js')
     <script>
         setupImageSize();
 
@@ -69,7 +77,4 @@
             }
         }
     </script>
-
-    </div>
-
 @endsection

@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('tesAlert', function () {
+    return "ok";
+});
+
 Auth::routes();
 // admin
 Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
@@ -34,6 +38,11 @@ Route::get('admin/merchant', [App\Http\Controllers\admin\MitraController::class,
 Route::get('admin/detailmerchant/{id}', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
 Route::post('admin/verifikasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantVerification'])->name('admin.verifikasimerchant')->middleware('is_admin');
 
+// admin verifikasi
+Route::get('admin/verifikasi', [App\Http\Controllers\admin\VerificationMitraController::class, 'index'])->name('admin.verifiaksi')->middleware('is_admin');
+// Route::get('admin/detailmerchant/{id}', [App\Http\Controllers\admin\MitraController::class, 'merchantDetail'])->name('admin.detailmerchant')->middleware('is_admin');
+// Route::post('admin/verifikasimerchant', [App\Http\Controllers\admin\MitraController::class, 'merchantVerification'])->name('admin.verifikasimerchant')->middleware('is_admin');
+
 // User
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/user', [App\Http\Controllers\user\UserController::class, 'index'])->name('profile');
@@ -50,3 +59,6 @@ Route::get('/mitramerchant', [App\Http\Controllers\user\MitraMerchantController:
 Route::get('/daftarfood', [App\Http\Controllers\user\MitraMerchantController::class, 'registerFood'])->name('daftarfood');
 Route::get('/daftarmart', [App\Http\Controllers\user\MitraMerchantController::class, 'registerMart'])->name('daftarmart');
 Route::post('/storemerchant', [App\Http\Controllers\user\MitraMerchantController::class, 'store'])->name('storemerchant');
+
+// verifikasi mitra
+Route::post('/verifikasimitra', [App\Http\Controllers\user\VerificationMitraController::class, 'verifikasimitra'])->name('verifikasimitra');

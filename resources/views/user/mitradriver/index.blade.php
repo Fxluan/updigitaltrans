@@ -1,4 +1,7 @@
 @extends('user.layout.app')
+@section('carousel')
+    @include('user.layout.caraousel')
+@endsection
 @section('content')
     {{-- CONTENT --}}
     <div id="lisItem" class="col p-4">
@@ -44,7 +47,10 @@
     </div>
     @endforeach
     </div>
+    </div>
+@endsection
 
+@section('js')
     <script>
         setupImageSize();
 
@@ -69,7 +75,4 @@
             }
         }
     </script>
-
-    </div>
-
 @endsection

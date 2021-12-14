@@ -47,12 +47,15 @@ class MitraDriverController extends Controller
             )
         );
 
+
         return view('user.mitradriver.index', compact('list_item'));
     }
 
     public function registerMotocycle()
     {
-        $form = array(
+        $user_id = Auth::user()->id;
+
+        $form_regist = array(
             'link' => '/storedrive',
             'type_mitra' => 'motorcycle',
             'form' => array(
@@ -122,11 +125,38 @@ class MitraDriverController extends Controller
             )
         );
 
-        return view('user.mitradriver.form', compact('form'));
+        $form_validasi = array(
+            'link' => '/verifikasimitra',
+            'type_mitra' => 'motorcycle',
+            'form' => array(
+                array(
+                    'pertanyaan' => '1. Apakah anda ...',
+                    'pilihan_ganda' => ["jabawan A","jabawan B","jabawan C"],
+                    'type' => 'radio',
+                    'mandatory' => 'required',
+                ),
+                array(
+                    'pertanyaan' => '2. Apakah anda ...',
+                    'pilihan_ganda' => ["jabawan A","jabawan B","jabawan C"],
+                    'type' => 'radio',
+                    'mandatory' => 'required',
+                ),
+            )
+        );
+
+        $status_user = $this->checkstatus($user_id);
+        $data = array(
+            "form_regist"   => $form_regist,
+            "form_validasi" => $form_validasi,
+            "status_user"   => $status_user
+        );
+
+        return view('user.mitradriver.form', compact('data'));
     }
 
     public function registerCar()
     {
+        $user_id = Auth::user()->id;
         $form = array(
             'link' => '/storedrive',
             'type_mitra' => 'car',
@@ -197,7 +227,13 @@ class MitraDriverController extends Controller
             )
         );
 
-        return view('user.mitradriver.form', compact('form'));
+        $status_user = $this->checkstatus($user_id);
+        $data = array(
+            "form"        => $form,
+            "status_user" => $status_user
+        );
+
+        return view('user.mitradriver.form', compact('data'));
     }
 
     public function store(Request $request)
@@ -241,9 +277,25 @@ class MitraDriverController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Pengajuan anda Terkirim.');
+            // return redirect()->back()->alert()->html('<i>HTML</i> <u>example</u>'," You can use <b>bold text</b>, <a href='//github.com'>links</a> and other HTML tags ",'success');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Pengajuan anda Ditolak.');
         }
+    }
+
+    private function checkstatus($id)
+    {
+        $is_exist = Driver::select('status')->where('user_id', $id)->exists();
+
+        if ($is_exist == true) {
+            $get_status = Driver::select('status')->where('user_id', $id)->limit(1)->orderBy('id', 'DESC')->value('status');
+        }
+
+        if ($is_exist == false) {
+            $get_status = 'not_exist';
+        }
+
+        return $get_status;
     }
 }

@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Digital Trans Milenial</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -47,13 +48,13 @@
                 <ul class="navbar-nav mr-auto"></ul>
                 <ul class="navbar-nav abs-center-x">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/mitradriver')}}">Mitra Driver</a>
+                        <a class="nav-link" href="{{ url('/mitradriver') }}">Mitra Driver</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/mitramerchant')}}">Mitra Merchant</a>
+                        <a class="nav-link" href="{{ url('/mitramerchant') }}">Mitra Merchant</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/kontakkami')}}">Kontak Kami</a>
+                        <a class="nav-link" href="{{ url('/kontakkami') }}">Kontak Kami</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -97,32 +98,7 @@
             </div>
         </div>
 
-        {{-- CAROUSEL --}}
-        <div id="carousel" class="carousel slide" data-ride="carousel">
-            <?php
-            $img_carousel = ['no_img.jpeg', 'no_img.jpeg', 'no_img.jpeg'];
-            ?>
-            <div class="carousel-inner">
-                @foreach ($img_carousel as $key => $val_img_carousel)
-                    @if ($key == 0)
-                        <div class="carousel-item active">
-                    @endif
-                    @if ($key != 0)
-                        <div class="carousel-item">
-                    @endif
-                    <img id="carousel-img-{{ $key }}" class="carousel-img"
-                        src="{{ asset('img/no_img.jpeg') }}" alt="{{ $key }}">
-            </div>
-            @endforeach
-            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
+        @yield('carousel')
     </div>
 
     <script>
@@ -178,16 +154,25 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    {{-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
+    </script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+        integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
+
+    {{-- sweet alert --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @include('sweetalert::alert')
+
+    @yield('js')
 </body>
 
 </html>
