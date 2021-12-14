@@ -62,7 +62,10 @@
                     <p>pengajuan anda ditolak</p>
                 @endif
                 @if ($data['status_user'] == 4)
-                    <p>pengajuan anda menunggu validasi</p>
+                    <p>akun anda dibekukan</p>
+                @endif
+                @if ($data['status_user'] == 5)
+                    <p>pengajuan anda menunggu verifikasi.</p>
                 @endif
 
             </div>

@@ -127,7 +127,7 @@ class MitraDriverController extends Controller
             )
         );
 
-        $pertanyaan_verifikasi = PertanyaanVerifikasi::get();
+        $pertanyaan_verifikasi = PertanyaanVerifikasi::where('type_mitra', 'driver')->get();
 
         $form_verifikasi = [];
         foreach ($pertanyaan_verifikasi as $key => $value) {
@@ -145,7 +145,7 @@ class MitraDriverController extends Controller
             'form' => $form_verifikasi
         );
 
-        $status_user = $this->checkstatus($user_id);
+        $status_user = $this->checkstatus($user_id, 'motorcycle');
 
         $data = array(
             "form_regist"   => $form_regist,
@@ -159,7 +159,7 @@ class MitraDriverController extends Controller
     public function registerCar()
     {
         $user_id = Auth::user()->id;
-        $form = array(
+        $form_regist = array(
             'link' => '/storedrive',
             'type_mitra' => 'car',
             'form' => array(
@@ -229,10 +229,30 @@ class MitraDriverController extends Controller
             )
         );
 
-        $status_user = $this->checkstatus($user_id);
+        $pertanyaan_verifikasi = PertanyaanVerifikasi::where('type_mitra', 'driver')->get();
+
+        $form_verifikasi = [];
+        foreach ($pertanyaan_verifikasi as $key => $value) {
+            $form_verifikasi[] = array(
+                'id'            => $value->id,
+                'pertanyaan'    => $value->pertanyaan,
+                'pilihan_ganda' => json_decode($value->pilihan_ganda),
+                'type'          => 'radio',
+                'mandatory'     => 'required',
+            );
+        }
+
+        $form_validasi = array(
+            'link' => '/verifikasimitradriver',
+            'type_mitra' => 'car',
+            'form' => $form_verifikasi
+        );
+
+        $status_user = $this->checkstatus($user_id, 'car');
         $data = array(
-            "form"        => $form,
-            "status_user" => $status_user
+            "form_regist"   => $form_regist,
+            "form_validasi" => $form_validasi,
+            "status_user"   => $status_user
         );
 
         return view('user.mitradriver.form', compact('data'));
@@ -285,12 +305,12 @@ class MitraDriverController extends Controller
         }
     }
 
-    private function checkstatus($id)
+    private function checkstatus($id, $type)
     {
-        $is_exist = Driver::select('status')->where('user_id', $id)->exists();
+        $is_exist = Driver::select('status')->where('user_id', $id)->where('vehicle_type', $type)->exists();
 
         if ($is_exist == true) {
-            $get_status = Driver::select('status')->where('user_id', $id)->limit(1)->orderBy('id', 'DESC')->value('status');
+            $get_status = Driver::select('status')->where('user_id', $id)->where('vehicle_type', $type)->limit(1)->orderBy('id', 'DESC')->value('status');
         }
 
         if ($is_exist == false) {
